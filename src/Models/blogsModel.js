@@ -16,7 +16,7 @@ const blogsSchema = new mongoose.Schema({
         ref : "Author"
     },
     tags : {
-        type : Array,
+        type : [{type:String}],
         default : []
     },
     category : {
@@ -35,6 +35,6 @@ const blogsSchema = new mongoose.Schema({
         type : Boolean,
         default : false
     }
-},{timettamps : true})
+},{timestamps : true})
 
 module.exports = mongoose.model("BlogsModel",blogsSchema)
