@@ -1,5 +1,6 @@
 const blogsModel=require('../Models/blogsModel')
 const authormodel=require('../Models/author')
+const IsValidObjectId=require('mongoose')
 
 const CreateBlogs=async function(req, res){
     try{
@@ -7,6 +8,9 @@ const CreateBlogs=async function(req, res){
         let {title,body,authorId,category,}=req.body
         if(!title||!body||!authorId||!category){
             return res.status(400).send('provide data')
+        }
+        if(!IsValidObjectId(authorId)){
+            return res.status(400).send('invalid authorId')
         }
         let author= await authormodel.findById(authorId)
         if(!author){
