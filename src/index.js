@@ -1,8 +1,8 @@
 const express = require('express')
-const { Router } = require('express');
+//const { Router } = require('express');
 const bodyparser=require('body-parser')
 const {default: mongoose}= require('mongoose')
-const routes = require('./routes/route')
+const route = require('../src/route')
 
 const app=express();
 app.use(bodyparser.json());
@@ -11,7 +11,7 @@ mongoose.connect("mongodb+srv://ayush8120:GeGo5qhr7wM6VQyg@cluster0.n1nevi5.mong
 .then(()=>console.log("mongoDB is connected"))
 .catch(err=>console.log(err))
 
-app.use('/',routes)
+app.use('/',route)
 app.listen(process.env.PORT||3000, function(){console.log('Express app running On PORT'+(process.env.PORT||3000))
 })
 
