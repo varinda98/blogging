@@ -24,4 +24,21 @@ const CreateBlogs=async function(req, res){
         res.status(500).send({ msg: "Error", error: error.message })
     }
 }
+
+const getBlogs=async function(req, res){
+    try{
+        let body=req.query
+        let data=await blogsModel.find(body)
+        if(!data){
+            return res.status(404).send('documents are not found')
+        }
+        else{
+            res.status(200).send({msg:data})
+        }
+    }catch(error){
+        console.log("This is the error :", error.message)
+        res.status(500).send({ msg: "Error", error: error.message })
+    }
+}
  module.exports.CreateBlogs=CreateBlogs
+ module.exports.getBlogs=getBlogs
