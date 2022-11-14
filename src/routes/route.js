@@ -7,7 +7,7 @@ router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
-router.post('/createauthor',author.createAuthor)
+router.post('/authors',author.createAuthor)
 
 
 module.exports = router;

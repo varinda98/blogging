@@ -1,27 +1,37 @@
 const mongoose=require('mongoose')
 
+var validateEmail = function(email) {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email)
+}
+
 const author = new mongoose.Schema({
     fname:{
         type:String,
-        require:true
+        required:true
     },
     lname:{
         type:String,
-        require:true
+        required:true
     },
     title: {
         type:String, 
-        enum:['Mr', 'Mrs', 'Miss']
+        enum:['Mr', 'Mrs', 'Miss'],
+        required:true
     },
-
-    email:{
-        type:String,
-        require:true,
-        unique:true
+    email: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        unique: true,
+        required: true,
+        validate: [validateEmail],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
     },
+    
     password:{
         type:String,
-        require:true
+        required:true
     }
 },{timestamps:true});
 

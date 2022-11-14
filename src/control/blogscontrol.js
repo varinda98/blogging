@@ -1,5 +1,4 @@
 const blogsModel=require('../Models/blogsModel')
-const authormodel=require('../Models/author')
 
 const CreateBlogs=async function(req, res){
     try{
