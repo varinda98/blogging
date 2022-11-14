@@ -1,16 +1,6 @@
 const blogsModel=require('../Models/blogsModel')
 const authormodel=require('../Models/author')
-//const {IsValidObjectId}= require('mongoose')
-const mongoose = require("mongoose")
-let isValidObjectId = function (value){
-    if(!mongoose.Types.ObjectId.isValid(value)){
-      return false
-    }
-    else{
-      return true
-    }
-  }
-
+const {isValidObjectId}= require("mongoose")
 
 const CreateBlogs=async function(req, res){
     try{
@@ -35,6 +25,20 @@ const CreateBlogs=async function(req, res){
     }
 }
 
-
-
+const getBlogs=async function(req, res){
+    try{
+        let body=req.query
+        let data=await blogsModel.find(body)
+        if(!data){
+            return res.status(404).send('documents are not found')
+        }
+        else{
+            res.status(200).send({msg:data})
+        }
+    }catch(error){
+        console.log("This is the error :", error.message)
+        res.status(500).send({ msg: "Error", error: error.message })
+    }
+}
  module.exports.CreateBlogs=CreateBlogs
+ module.exports.getBlogs=getBlogs

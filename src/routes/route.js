@@ -10,7 +10,9 @@ router.get("/test-me", function (req, res) {
 
 router.post('/authors',author.createAuthor)
 
-router.post('/CreateBloges',bloges.CreateBlogs)
+router.post('/blogs',bloges.CreateBlogs)
+
+router.get('/blogs',bloges.getBlogs)
 
 
 module.exports = router;
