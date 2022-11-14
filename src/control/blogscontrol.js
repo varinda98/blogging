@@ -1,6 +1,16 @@
 const blogsModel=require('../Models/blogsModel')
 const authormodel=require('../Models/author')
-const IsValidObjectId= require('mongoose')
+//const {IsValidObjectId}= require('mongoose')
+const mongoose = require("mongoose")
+let isValidObjectId = function (value){
+    if(!mongoose.Types.ObjectId.isValid(value)){
+      return false
+    }
+    else{
+      return true
+    }
+  }
+
 
 const CreateBlogs=async function(req, res){
     try{
@@ -9,7 +19,7 @@ const CreateBlogs=async function(req, res){
         if(!title||!body||!authorId||!category){
             return res.status(400).send('provide data')
         }
-        if(!IsValidObjectId(authorId)){
+        if(!isValidObjectId(authorId)){
             return res.status(400).send('invalid authorId')
         }
         let author= await authormodel.findById(authorId)
@@ -24,4 +34,7 @@ const CreateBlogs=async function(req, res){
         res.status(500).send({ msg: "Error", error: error.message })
     }
 }
+
+
+
  module.exports.CreateBlogs=CreateBlogs
