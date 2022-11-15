@@ -1,5 +1,6 @@
 const authormodel=require('../Models/author')
 
+/////////////////////~CreateAuthor ~/////////////////////////
 const createAuthor = async function (req, res) {
     try {
         let data=req.body
@@ -14,4 +15,5 @@ const createAuthor = async function (req, res) {
     }
 }
 
+//////////////////////~Exports Module~///////////////////////
 module.exports.createAuthor=createAuthor
