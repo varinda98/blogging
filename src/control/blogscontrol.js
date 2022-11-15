@@ -32,7 +32,7 @@ const CreateBlogs = async function (req, res) {
 const getBlogs = async function (req, res) {
     try {
         let body = req.query
-        body.isDeleted=true
+        body.isDeleted=false
         body.isPublished=true
         let data = await blogsModel.find(body)
         if (data.length<=0) {
