@@ -1,10 +1,12 @@
 const mongoose=require('mongoose')
 
+//////////////////////////~Email Validation Function~//////////////////
 var validateEmail = function(email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return re.test(email)
 }
 
+/////////////////////////~Author Module Schema~/////////////////////////
 const author = new mongoose.Schema({
     fname:{
         type:String,
@@ -35,5 +37,5 @@ const author = new mongoose.Schema({
     }
 },{timestamps:true});
 
-
+//////////////////////////~Exports Module~////////////////////////
 module.exports=mongoose.model('Author',author)
