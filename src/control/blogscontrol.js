@@ -32,6 +32,8 @@ const CreateBlogs = async function (req, res) {
 const getBlogs = async function (req, res) {
     try {
         let body = req.query
+        body.isDeleted=true
+        body.isPublished=true
         let data = await blogsModel.find(body)
         if (!data) {
             return res.status(404).send({ status: false, msg:'documents are not found'})
