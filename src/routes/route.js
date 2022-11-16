@@ -22,5 +22,7 @@ router.delete('/blogs/:blogId',bloges.deleteBlog)
 
 router.delete('/blogs',bloges.deleteBlogs)
 
+router.post('/login',author.loginUser)
+
 /////////////////////////~exports Modules~/////////////////////////////
 module.exports = router;
