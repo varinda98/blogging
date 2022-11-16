@@ -51,10 +51,14 @@ const getBlogs = async function (req, res) {
 //////////////////////////////////~UpdateBlogs~/////////////////////////////////
 const updateBlogs = async function (req, res) {
     try {
+        let authorId = req.authorId
+        console.log(authorId)
         let blogId = req.params.blogId
         let { title, body, tags, subcategory } = req.body
         if (!isValidObjectId(blogId)) { return res.status(400).send({ status: false, msg: "pls provide a valid BlogId" }) }
         let blogdata = await blogsModel.findById(blogId)
+        console.log(blogdata.authorId)
+        if (blogdata.authorId != authorId) { return res.status(401).send({ status: false, msg: "not allow to chenge other author blogs" }) }
         if (blogdata.isDeleted == true) { return res.status(404).send({ status: false, msg: "Page not found , already deleted" }) }
         if (!blogdata) { return res.status(404).send({ status: false, msg: "Blog does not exists" }) }
         else {
@@ -68,13 +72,14 @@ const updateBlogs = async function (req, res) {
         return res.status(500).send({ status: false, data: error.message })
     }
 }
-
 ////////////////////////////////////~DeleteBlogs~////////////////////////////////////
 const deleteBlog = async function (req, res) {
     try {
+        let authorid = req.authorId
         let blogId = req.params.blogId
         if (!isValidObjectId(blogId)) { return res.status(400).send({ status: false, msg: "Pls provide a valid blogId" }) }
         let blogdata = await blogsModel.findById(blogId)
+        if (authorid != blogdata.authorId) { return res.status(401).send({ status: false, msg: "Not allow to delete other author bloges" }) }
         if (!blogdata) { return res.status(404).send({ status: false, msg: "No blog exists with this Id" }) }
         if (blogdata.isDeleted == true) { return res.status(400).send({ status: false, msg: "blog not found , already deleted" }) }
         else {
@@ -91,30 +96,26 @@ const deleteBlog = async function (req, res) {
 const deleteBlogs = async function (req, res) {
     try {
         let data = req.query
+        data.isDeleted = false
+        let authorid = req.authorId
         let authorId = data.authorId
-        if (authorId) {
-            if (!isValidObjectId(authorId)) { return res.status(400).send({ status: false, msg: "Pls provide a valid autorId" }) }
-            let check = await blogsModel.find({authorId})
-            console.log(check)
-            if (check.length <= 0) { return res.status(404).send({ status: false, msg: "Blog not found" }) }
-            let deleteblogs = await blogsModel.updateMany(
-                data, { $set: { isDeleted: true }, deleteAt: moment().format() }
-            )
-            return res.status(200).send({ status: true })
+        if (authorId) { if (!isValidObjectId(authorId)) { return res.status(400).send({ status: false, msg: "Pls provide a valid autorId" }) } }
+        let check = await blogsModel.find(data)
+        if (check.length <= 0) { return res.status(404).send({ status: false, msg: "Blog not found" }) }
+        for (let i = 0; i < check.length; i++) {
+            let ele = check[i]
+            let nn = ele.authorId
+            if (nn == authorid) {
+                let deleteblogs = await blogsModel.updateMany(
+                    { authorId: nn }, { $set: { isDeleted: true }, deleteAt: moment().format() }
+                )
+            }
         }
-        else{
-            let check = await blogsModel.find(data)
-            console.log(check)
-            if (check.length <= 0) { return res.status(404).send({ status: false, msg: "Blog not found" }) }
-            let deleteblogs = await blogsModel.updateMany(
-                data, { $set: { isDeleted: true }, deleteAt: moment().format() }
-            )
-            return res.status(200).send({ status: true })
-        }
+        return res.status(200).send({ status: true })
     }
- catch (error) {
-    res.status(500).send({ status: false, msg: error.message })
-}
+    catch (error) {
+        res.status(500).send({ status: false, msg: error.message })
+    }
 }
 //////////////////////////////////~Modules~///////////////////////////////
 module.exports.CreateBlogs = CreateBlogs

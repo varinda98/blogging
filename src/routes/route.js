@@ -4,6 +4,7 @@ const router = express.Router();
 //////////////////////////~Import folder~////////////////////////
 const author=require('../control/authorcontrol')
 const bloges=require('../control/blogscontrol')
+const middleware=require('../middleware/auth')
 
 /////////////////////////~Router besed Api~//////////////////////
 router.get("/test-me", function (req, res) {
@@ -12,15 +13,15 @@ router.get("/test-me", function (req, res) {
 
 router.post('/authors',author.createAuthor)
 
-router.post('/blogs',bloges.CreateBlogs)
+router.post('/blogs',middleware.Authentication,bloges.CreateBlogs)
 
-router.get('/blogs',bloges.getBlogs)
+router.get('/blogs',middleware.Authentication,bloges.getBlogs)
 
-router.put('/blogs/:blogId',bloges.updateBlogs)
+router.put('/blogs/:blogId',middleware.Authentication,bloges.updateBlogs)
 
-router.delete('/blogs/:blogId',bloges.deleteBlog)
+router.delete('/blogs/:blogId',middleware.Authentication,bloges.deleteBlog)
 
-router.delete('/blogs',bloges.deleteBlogs)
+router.delete('/blogs',middleware.Authentication,bloges.deleteBlogs)
 
 router.post('/login',author.loginUser)
 
