@@ -1,10 +1,7 @@
 const authormodel = require('../Models/author')
 const jwt = require('jsonwebtoken')
 
-var validateEmail = function(email) {
-  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return re.test(email)
-}
+var validateEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
 
 /////////////////////~CreateAuthor ~/////////////////////////
 const createAuthor = async function (req, res) {
@@ -16,7 +13,7 @@ const createAuthor = async function (req, res) {
     if (!title) { return res.status(400).send({ status: false, msg: "title is mandatory" }) }
     if (title == "Mr" || title == "Mrs" || title == "Miss") {
       if (!email) { return res.status(400).send({ status: false, msg: "email is mandatory" }) }
-      if(!validateEmail(email)){return res.status(400).send({status:false,msg:"Pls provide a valid Email"})}
+      if(!email.match(validateEmail)){return res.status(400).send({status:false,msg:"pls provide a valid email id"})}
       if (!password) { return res.status(400).send({ status: false, msg: "password is mandatory" }) }
       let emailcheck = await authormodel.findOne({ email })
       if (emailcheck) return res.status(400).send({ status: false, msg: "pls provide a unique email" })
